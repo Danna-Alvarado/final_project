@@ -11,7 +11,8 @@ function App() {
     setUsuario("Danna Alvarado");
   }
 
-  React.useEffect(() => {
+ useEffect(() => {
+  const intervalo = setInterval(() => {
     if (window.google && !usuario) {
       window.google.accounts.id.initialize({
         client_id: "275077458710-tjaj8gg3oscia4tq1meoqvs3loc0773q.apps.googleusercontent.com",
@@ -27,8 +28,13 @@ function App() {
           shape: "rectangular",
         }
       );
+
+      clearInterval(intervalo);
     }
-  }, [usuario]);
+  }, 500);
+
+  return () => clearInterval(intervalo);
+}, [usuario]);
 
   function cerrarSesion() {
     setUsuario(null);
