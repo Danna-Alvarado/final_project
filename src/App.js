@@ -12,28 +12,35 @@ function App() {
   }
 
  useEffect(() => {
-  const intervalo = setInterval(() => {
-    if (window.google && !usuario) {
+  const cargarGoogleButton = () => {
+    if (
+      window.google &&
+      document.getElementById("googleSignInDiv") &&
+      !usuario
+    ) {
+      const div = document.getElementById("googleSignInDiv");
+
+      // limpia por si ya había algo renderizado
+      div.innerHTML = "";
+
       window.google.accounts.id.initialize({
-        client_id: "275077458710-tjaj8gg3oscia4tq1meoqvs3loc0773q.apps.googleusercontent.com",
+        client_id:
+          "275077458710-tjaj8gg3oscia4tq1meoqvs3loc0773q.apps.googleusercontent.com",
         callback: handleCredentialResponse,
       });
 
-      window.google.accounts.id.renderButton(
-        document.getElementById("googleSignInDiv"),
-        {
-          theme: "outline",
-          size: "large",
-          text: "continue_with",
-          shape: "rectangular",
-        }
-      );
-
-      clearInterval(intervalo);
+      window.google.accounts.id.renderButton(div, {
+        theme: "outline",
+        size: "large",
+        text: "continue_with",
+        shape: "rectangular",
+      });
+    } else {
+      setTimeout(cargarGoogleButton, 500);
     }
-  }, 500);
+  };
 
-  return () => clearInterval(intervalo);
+  cargarGoogleButton();
 }, [usuario]);
 
   function cerrarSesion() {
